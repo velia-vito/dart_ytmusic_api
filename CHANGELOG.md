@@ -1,3 +1,12 @@
+## 1.0.8
+**Fixes**
+- Fix search method: fixed search method returns empty results.
+
+## 1.0.7
+
+- **Fixes**
+- Some songs were not found.
+
 ## 1.0.6
 
 **Fixes**
