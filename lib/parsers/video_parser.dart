@@ -64,22 +64,31 @@ class VideoParser {
     );
   }
 
-  static VideoDetailed parsePlaylistVideo(dynamic item) {
-    final columns =
-        traverseList(item, ["flexColumns", "runs"]).expand((e) => e).toList();
+  static VideoDetailed? parsePlaylistVideo(dynamic item) {
+    final flexColumns =
+        traverseList(item, ['flexColumns', 'runs']).expand((e) => e).toList();
+    final fixedColumns =
+        traverseList(item, ['fixedColumns', 'runs']).expand((e) => e).toList();
 
-    final title = columns.firstWhere(isTitle, orElse: () => columns[0]);
-    final artist = columns.firstWhere(isArtist, orElse: () => columns[1]);
-    final duration = columns.firstWhere(isDuration, orElse: () => null);
+    final title = flexColumns.firstWhere(isTitle,
+        orElse: () => flexColumns.isNotEmpty ? flexColumns[0] : null);
+    final artist = flexColumns.firstWhere(isArtist,
+        orElse: () => flexColumns.length > 1 ? flexColumns[1] : null);
+    final duration = fixedColumns.firstWhere(isDuration, orElse: () => null);
+
+    final videoId1 =
+        traverseString(item, ["playNavigationEndpoint", "videoId"]);
+    final videoId2 = RegExp(r"https:\/\/i\.ytimg\.com\/vi\/(.+)\/")
+        .firstMatch(traverseList(item, ["thumbnails"]).firstOrNull?.url ?? '')
+        ?.group(1);
+
+    if ((videoId1?.isEmpty ?? true) && videoId2 == null) {
+      return null;
+    }
 
     return VideoDetailed(
       type: "VIDEO",
-      videoId: traverseString(item, ["playNavigationEndpoint", "videoId"]) ??
-          traverseList(item, ["thumbnails"])
-              .first
-              .url
-              .split("https://i.ytimg.com/vi/")[1]
-              .split("/")[0],
+      videoId: videoId1 ?? videoId2!,
       name: traverseString(title, ["text"]) ?? '',
       artist: ArtistBasic(
         name: traverseString(artist, ["text"]) ?? '',
