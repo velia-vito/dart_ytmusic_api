@@ -78,7 +78,8 @@ class SongDetailed {
             .toList();
 }
 
-class VideoDetailed {
+class VideoDetailed implements SearchResult {
+  @override
   final String type;
   final String videoId;
   final String name;
@@ -107,9 +108,10 @@ class VideoDetailed {
             .toList();
 }
 
-class ArtistDetailed {
+class ArtistDetailed implements SearchResult {
   final String artistId;
   final String name;
+  @override
   final String type;
   final List<ThumbnailFull> thumbnails;
 
@@ -130,7 +132,8 @@ class ArtistDetailed {
             .toList();
 }
 
-class AlbumDetailed {
+class AlbumDetailed implements SearchResult {
+  @override
   final String type;
   final String albumId;
   final String playlistId;
@@ -162,7 +165,8 @@ class AlbumDetailed {
             .toList();
 }
 
-class PlaylistDetailed {
+class PlaylistDetailed implements SearchResult {
+  @override
   final String type;
   final String playlistId;
   final String name;
@@ -188,7 +192,8 @@ class PlaylistDetailed {
             .toList();
 }
 
-class SongFull {
+class SongFull implements SearchResult {
+  @override
   final String type;
   final String videoId;
   final String name;
@@ -264,9 +269,10 @@ class VideoFull {
         tags = (map['tags'] as List).cast<String>();
 }
 
-class ArtistFull {
+class ArtistFull implements SearchResult {
   final String artistId;
   final String name;
+  @override
   final String type;
   final List<ThumbnailFull> thumbnails;
   final List<SongDetailed> topSongs;
