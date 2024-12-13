@@ -24,12 +24,9 @@ class SearchParser {
 
     if (parsers.containsKey(type)) {
       final parsedResult = parsers[type]!(item);
-      if (parsedResult is SearchResult) {
-        return parsedResult;
-      }
+      return parsedResult as SearchResult;
     } else {
       return null;
     }
-    return null;
   }
 }
