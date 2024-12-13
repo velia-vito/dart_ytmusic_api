@@ -539,6 +539,9 @@ class YTMusic {
       ["musicPlaylistShelfRenderer", "musicResponsiveListItemRenderer"],
     );
     dynamic continuation = traverse(playlistData, ["continuation"]);
+    if (continuation is List) {
+      continuation = continuation[0];
+    }
     while (continuation is! List) {
       final songsData = await constructRequest(
         "browse",
@@ -549,7 +552,10 @@ class YTMusic {
       continuation = traverse(songsData, ["continuation"]);
     }
 
-    return songs.map(VideoParser.parsePlaylistVideo).toList();
+    return songs
+        .map(VideoParser.parsePlaylistVideo)
+        .whereType<VideoDetailed>()
+        .toList();
   }
 
   /// Retrieves the home sections of the music platform.
